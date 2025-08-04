@@ -1,0 +1,26 @@
+<!-- templates/eligibility/chat.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ask the Scheme Bot</title>
+</head>
+<body>
+    <h2>Ask About Government Schemes</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="question" placeholder="Ask your question..." style="width: 300px;" required>
+        <button type="submit">Ask</button>
+    </form>
+    {% if reply %}
+        <p><strong>Bot:</strong> {{ reply }}</p>
+    {% endif %}
+    <script>
+    document.getElementById("chat-form").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        // your existing JS code here
+    });
+</script>
+
+    
+</body>
+</html>

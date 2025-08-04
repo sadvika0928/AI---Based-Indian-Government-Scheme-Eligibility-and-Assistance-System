@@ -1,0 +1,77 @@
+<!-- templates/eligibility/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Matched Schemes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f2f6ff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2b4eff;
+        }
+        .scheme-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        .scheme-card:hover {
+            transform: translateY(-5px);
+        }
+        .scheme-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+        .scheme-detail {
+            margin: 8px 0;
+            color: #555;
+        }
+        .apply-button {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 18px;
+            background: #2b4eff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+        .apply-button:hover {
+            background: #1c38d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Matched Government Schemes</h1>
+
+        {% if schemes %}
+            {% for scheme in schemes %}
+                <div class="scheme-card">
+                    <div class="scheme-title">{{ scheme.name }}</div>
+                    <div class="scheme-detail"><strong>Description:</strong> {{ scheme.description }}</div>
+                    <div class="scheme-detail"><strong>Eligibility:</strong> {{ scheme.eligibility }}</div>
+                    <div class="scheme-detail"><strong>Documents:</strong> {{ scheme.documents }}</div>
+                    <a class="apply-button" href="{{ scheme.apply }}" target="_blank">Apply Now</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align:center;">No matching schemes found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

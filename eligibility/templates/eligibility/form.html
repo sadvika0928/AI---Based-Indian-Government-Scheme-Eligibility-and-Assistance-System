@@ -1,0 +1,96 @@
+<!-- eligibility/templates/eligibility/form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eligibility Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f2f2f2;
+            padding: 40px;
+        }
+
+        .form-box {
+            background: white;
+            max-width: 600px;
+            margin: auto;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 25px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a.back {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            color: #333;
+            text-decoration: none;
+        }
+
+        a.back:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <h2>Eligibility Form</h2>
+        <form method="POST" action="{% url 'submit' %}">
+            {% csrf_token %}
+
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="income">Annual Income (₹):</label>
+            <input type="number" id="income" name="income" required>
+
+            <label for="caste">Caste Category:</label>
+            <input type="text" id="caste" name="caste" required>
+
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" required>
+
+            <button type="submit">Check Eligibility</button>
+        </form>
+        <a class="back" href="{% url 'landing_page' %}">← Back to Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eligibility Score</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 50px; }
+        .circle-container { width: 300px; margin: 0 auto; }
+        .missing { color: red; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🧠 Document Analyzed</h1>
+    <div class="circle-container">
+        <canvas id="scoreChart" width="250" height="250"></canvas>
+    </div>
+    <h2>Eligibility Score: {{ score }}%</h2>
+
+    {% if missing %}
+        <div class="missing">
+            <h3>🚫 Missing Keywords:</h3>
+            <ul>
+                {% for word in missing %}
+                    <li>{{ word }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <script>
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        const score = {{ score|safe }};  // Ensures value is rendered correctly as a JS number
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [score, 100 - score],
+                    backgroundColor: ['#2ecc71', '#ecf0f1'],
+                }],
+                labels: ['Eligible', 'Missing']
+            },
+            options: {
+                cutout: '80%',
+                plugins: {
+                    tooltip: { enabled: false },
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

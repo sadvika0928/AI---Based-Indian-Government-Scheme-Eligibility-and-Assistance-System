@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Government Scheme System</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #e0f2f1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero {
+            padding: 100px 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #34495e;
+            margin-bottom: 40px;
+        }
+
+        .get-started-btn {
+            background-color: #f39c12;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 1.2em;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .get-started-btn:hover {
+            background-color: #e67e22;
+        }
+
+        footer {
+            margin-top: 80px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+
+        /* Chatbot Styles */
+        #chatbot-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2b4eff;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            z-index: 999;
+            font-family: sans-serif;
+        }
+
+        #chatbot-widget {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 320px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-family: sans-serif;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        #chatbot-header {
+            background: #2b4eff;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chatbot-messages {
+            height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        #chatbot-form {
+            display: flex;
+            border-top: 1px solid #eee;
+        }
+
+        #chatbot-input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+        }
+
+        #chatbot-form button {
+            background: #2b4eff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>AI-Powered Government Scheme Assistant 🇮🇳</h1>
+        <p>Find the best government schemes you're eligible for — instantly, smartly, and in your language.</p>
+        <a href="{% url 'eligibility_form' %}" class="get-started-btn">🚀 Get Started</a>
+        <a href="{% url 'upload_document' %}" class="get-started-btn">📤 Upload Document</a>
+
+    </div>
+
+    <!-- Chatbot Button -->
+    <div id="chatbot-button" onclick="toggleChatbot()">💬 Chat with Assistant</div>
+
+    <!-- Chatbot Popup -->
+    <div id="chatbot-widget">
+        <div id="chatbot-header">AI Assistant <span style="cursor:pointer;" onclick="toggleChatbot()">✖</span></div>
+        <div id="chatbot-messages"></div>
+        <form id="chatbot-form">
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." autocomplete="off" />
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <footer>
+        Made with ❤️ for Bharat | Team AI-Gov | © 2025
+    </footer>
+
+    <script>
+    function toggleChatbot() {
+        const widget = document.getElementById("chatbot-widget");
+        widget.style.display = widget.style.display === "block" ? "none" : "block";
+    }
+
+    document.getElementById("chatbot-form").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const input = document.getElementById("chatbot-input");
+        const userMessage = input.value.trim();
+        if (!userMessage) return;
+
+        addMessage("user", userMessage);
+        input.value = "";
+
+        try {
+            const response = await fetch("/chatbot_ask/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
+                },
+                body: JSON.stringify({ message: userMessage })
+            });
+
+            const data = await response.json();
+            const reply = data.response || "Sorry, I couldn't understand.";
+            addMessage("bot", reply);
+        } catch (error) {
+            addMessage("bot", "Something went wrong. Please try again.");
+        }
+    });
+
+    function addMessage(sender, text) {
+        const container = document.getElementById("chatbot-messages");
+        const div = document.createElement("div");
+        div.textContent = (sender === "user" ? "🧑 You: " : "🤖 Assistant: ") + text;
+        div.style.margin = "10px 0";
+        div.style.color = sender === "user" ? "#2b4eff" : "#333";
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function getCSRFToken() {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken='));
+        return cookieValue ? cookieValue.split('=')[1] : '';
+    }
+</script>
+
+
+</body>
+</html>
